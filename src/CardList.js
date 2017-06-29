@@ -22,33 +22,22 @@ class CardList extends Component {
     let items = [];
 
     console.log("componentDidMount");
-    this.firebaseRef = firebase.database().ref()
-      .child('flashcards')
-      .child('users')
-      .child('martin')
-      .child('flashcards')
-    this.firebaseRef.on("child_added", function(dataSnapshot) {
-      console.log("===============");
-      console.log("child_added: ", dataSnapshot.val() );
-      console.log("===============");
+    //this.firebaseRef = firebase.database().ref()
+    //  .child('flashcards')
+    //  .child('users')
+    //  .child('martin')
+    //  .child('flashcards')
+    //this.firebaseRef.on("child_added", function(dataSnapshot) {
+    //  console.log("===============");
+    //  console.log("child_added: ", dataSnapshot.val() );
+    //  console.log("===============");
 
-      items.push(dataSnapshot.val());
-      this.setState({
-        items: items
-      });
-    }.bind(this));
+    //  items.push(dataSnapshot.val());
+    //  this.setState({
+    //    words: items
+    //  });
+    //}.bind(this));
   }
-
-// componentWillMount: function() {
-//      const rootRef  = firebase.database().ref().child('flashcards');
-//      const speedRef = rootRef.child('words')
-//      speedRef.on('value', snap => {
-//        this.setState({
-//          speed: snap.val()
-//        })
-//      })
-//    }
-//
 
 
   constructor() {
@@ -132,7 +121,8 @@ class CardList extends Component {
       <li
         data-index={index}
         key={index}
-        onClick={ this.wordSelected.bind(this, word, 'from') }>
+        onClick={ this.wordSelected.bind(this, word, 'from') }
+      >
         {word.from}
       </li>
     ))
@@ -141,7 +131,8 @@ class CardList extends Component {
       <li
         data-index={index}
         key={index}
-        onClick={ this.wordSelected.bind(this, word, 'to') }>
+        onClick={ this.wordSelected.bind(this, word, 'to') }
+      >
         {word.to}
       </li>
     ))
