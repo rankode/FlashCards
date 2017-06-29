@@ -1,27 +1,40 @@
 import React, { Component } from 'react';  // eslint-disable-line no-unused-vars
 import './CardList.css';
-// import * as firebase from 'firebase';
-//
-// var config = {
-//   apiKey: "AIzaSyDOFue3JEpieeIH36CsNNiNmrEE0XcWlnI",
-//   authDomain: "react-firebase-b2631.firebaseapp.com",
-//   databaseURL: "https://react-firebase-b2631.firebaseio.com",
-//   projectId: "react-firebase-b2631",
-//   storageBucket: "react-firebase-b2631.appspot.com",
-//   messagingSenderId: "67795087718"
-// };
-//
-// firebase.initializeApp(config);
+import * as firebase from 'firebase';
+
+var config = {
+  apiKey: "AIzaSyDOFue3JEpieeIH36CsNNiNmrEE0XcWlnI",
+  authDomain: "react-firebase-b2631.firebaseapp.com",
+  databaseURL: "https://react-firebase-b2631.firebaseio.com",
+  projectId: "react-firebase-b2631",
+  storageBucket: "react-firebase-b2631.appspot.com",
+  messagingSenderId: "67795087718"
+};
+
+firebase.initializeApp(config);
 
 class CardList extends Component {
 
 
   componentDidMount() {
-    this.firebaseRef = firebase.database().ref().child('flashcards');
+
+    // Save data from Firebase here
+    let items = [];
+
+    console.log("componentDidMount");
+    this.firebaseRef = firebase.database().ref()
+      .child('flashcards')
+      .child('users')
+      .child('martin')
+      .child('flashcards')
     this.firebaseRef.on("child_added", function(dataSnapshot) {
-      this.items.push(dataSnapshot.val());
+      console.log("===============");
+      console.log("child_added: ", dataSnapshot.val() );
+      console.log("===============");
+
+      items.push(dataSnapshot.val());
       this.setState({
-        items: this.items
+        items: items
       });
     }.bind(this));
   }
