@@ -1,7 +1,42 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react';  // eslint-disable-line no-unused-vars
 import './CardList.css';
+// import * as firebase from 'firebase';
+//
+// var config = {
+//   apiKey: "AIzaSyDOFue3JEpieeIH36CsNNiNmrEE0XcWlnI",
+//   authDomain: "react-firebase-b2631.firebaseapp.com",
+//   databaseURL: "https://react-firebase-b2631.firebaseio.com",
+//   projectId: "react-firebase-b2631",
+//   storageBucket: "react-firebase-b2631.appspot.com",
+//   messagingSenderId: "67795087718"
+// };
+//
+// firebase.initializeApp(config);
 
 class CardList extends Component {
+
+
+  componentDidMount() {
+    this.firebaseRef = firebase.database().ref().child('flashcards');
+    this.firebaseRef.on("child_added", function(dataSnapshot) {
+      this.items.push(dataSnapshot.val());
+      this.setState({
+        items: this.items
+      });
+    }.bind(this));
+  }
+
+// componentWillMount: function() {
+//      const rootRef  = firebase.database().ref().child('flashcards');
+//      const speedRef = rootRef.child('words')
+//      speedRef.on('value', snap => {
+//        this.setState({
+//          speed: snap.val()
+//        })
+//      })
+//    }
+//
+
 
   constructor() {
     super();
@@ -34,6 +69,12 @@ class CardList extends Component {
   };
 
 
+  increaseCorrectCount(word_id) {
+      this.setState({
+        selected_from_word_id: word_id
+      })
+  }
+
   resetSelectedWords() {
     console.log('reset');
     this.setState({
@@ -45,6 +86,7 @@ class CardList extends Component {
   compareSelections() {
     if (this.state.selected_from_word_id === this.state.selected_to_word_id) {
       console.log('correct word')
+      this.increaseCorrectCount()
     } else {
       console.log('NOT correct word')
     }

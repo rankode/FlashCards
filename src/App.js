@@ -1,6 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import logo from './logo.svg';
 import './App.css';
+// import * as firebase from 'firebase';
+//
+// var config = {
+//   apiKey: "AIzaSyDOFue3JEpieeIH36CsNNiNmrEE0XcWlnI",
+//   authDomain: "react-firebase-b2631.firebaseapp.com",
+//   databaseURL: "https://react-firebase-b2631.firebaseio.com",
+//   projectId: "react-firebase-b2631",
+//   storageBucket: "react-firebase-b2631.appspot.com",
+//   messagingSenderId: "67795087718"
+// };
+//
+// firebase.initializeApp(config);
+
+
 
 class App extends Component {
   render() {
