@@ -22,21 +22,21 @@ class CardList extends Component {
     let items = [];
 
     console.log("componentDidMount");
-    //this.firebaseRef = firebase.database().ref()
-    //  .child('flashcards')
-    //  .child('users')
-    //  .child('martin')
-    //  .child('flashcards')
-    //this.firebaseRef.on("child_added", function(dataSnapshot) {
-    //  console.log("===============");
-    //  console.log("child_added: ", dataSnapshot.val() );
-    //  console.log("===============");
+    this.firebaseRef = firebase.database().ref()
+      .child('flashcards')
+      .child('users')
+      .child('martin')
+      .child('flashcards')
+    this.firebaseRef.on("child_added", function(dataSnapshot) {
+      console.log("===============");
+      console.log("child_added: ", dataSnapshot.val() );
+      console.log("===============");
 
-    //  items.push(dataSnapshot.val());
-    //  this.setState({
-    //    words: items
-    //  });
-    //}.bind(this));
+      items.push(dataSnapshot.val());
+      this.setState({
+        words: items
+      });
+    }.bind(this));
   }
 
 
