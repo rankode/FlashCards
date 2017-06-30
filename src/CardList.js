@@ -18,23 +18,16 @@ class CardList extends Component {
 
   componentDidMount() {
 
-    // Save data from Firebase here
-    let items = [];
-
-    console.log("componentDidMount");
-    this.firebaseRef = firebase.database().ref()
+    const firebaseRef = firebase.database().ref()
       .child('flashcards')
       .child('users')
       .child('martin')
       .child('flashcards')
-    this.firebaseRef.on("child_added", function(dataSnapshot) {
-      console.log("===============");
+    firebaseRef.on("value", function(dataSnapshot) {
       console.log("child_added: ", dataSnapshot.val() );
-      console.log("===============");
 
-      items.push(dataSnapshot.val());
       this.setState({
-        words: items
+        words: dataSnapshot.val()
       });
     }.bind(this));
   }
