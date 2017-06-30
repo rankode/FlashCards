@@ -26,13 +26,6 @@ class CardList extends Component {
 
     firebaseRef.on("value", function(dataSnapshot) {
       let words = dataSnapshot.val().clean() // clean removes undefined
-
-      // Add id to words
-      //  words = words.map(function(x, i) {
-      //   x.id = 1;
-      //   return x
-      // });
-
       this.setState({
         words: words
       });
@@ -54,21 +47,12 @@ class CardList extends Component {
 
 
   increaseCorrectCount() {
-    // Get a key for a new Post.
-    //var newPostKey = firebase.database().ref().child('posts').push().key;
-
-    // Write the new post's data simultaneously in the posts list and the user's post list.
     var updates = {};
-    //updates['/posts/' + newPostKey] = postData;
-    //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
     let word = this.state.selected_from_word
     console.log("Word id is: ", word.id)
     word.correct_guesses++
     updates['/flashcards/users/martin/flashcards/' + word.id ] = word;
-
     return firebase.database().ref().update(updates);
-    //return firebase.database().ref().update(updates);
   }
 
   resetSelectedWords() {
@@ -82,9 +66,6 @@ class CardList extends Component {
   compareSelections() {
     console.log(this.state.selected_from_word +'==='+ this.state.selected_to_word)
     if (! (this.state.selected_from_word && this.state.selected_to_word))  {
-      console.log('from or two is null, will not compare yet.')
-      // I just clicked to_word. Why is that not stored in state when this is a callback
-      // for the setState function?
       return
     }
     if (this.state.selected_from_word === this.state.selected_to_word) {
