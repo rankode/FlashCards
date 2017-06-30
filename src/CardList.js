@@ -104,7 +104,9 @@ class CardList extends Component {
       >
         {word.from}
       </li>
-    ))
+    )).shuffle()
+
+
 
     var to_list = this.state.words.map((word, index) => (
       <li
@@ -114,7 +116,7 @@ class CardList extends Component {
       >
         {word.to}
       </li>
-    ))
+    )).shuffle()
 
 
     return (
