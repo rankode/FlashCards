@@ -18,20 +18,31 @@ class CardList extends Component {
 
   componentDidMount() {
 
+    // Flash Cards
     const firebaseRef = firebase.database().ref()
       .child('flashcards')
       .child('users')
       .child('martin')
       .child('flashcards')
-
     firebaseRef.on("value", function(dataSnapshot) {
       let words = dataSnapshot.val().clean() // clean removes undefined
       this.setState({
         words: words
       });
-
       console.log("Update from Firebase", words );
+    }.bind(this));
 
+    // Settings
+    const firebaseSettingsRef = firebase.database().ref()
+      .child('flashcards')
+      .child('users')
+      .child('martin')
+      .child('settings')
+    firebaseSettingsRef.on("value", function(dataSnapshot) {
+      let settings = dataSnapshot.val();
+      this.setState({
+        settings: settings
+      });
     }.bind(this));
   }
 
@@ -41,6 +52,7 @@ class CardList extends Component {
     this.state = {
       selected_from_word: null,
       selected_to_word: null,
+      settings: {},
       words: [],
     }
   };
