@@ -23,12 +23,22 @@ class CardList extends Component {
       .child('users')
       .child('martin')
       .child('flashcards')
+
     firebaseRef.on("value", function(dataSnapshot) {
-      console.log("child_added: ", dataSnapshot.val() );
+      let words = dataSnapshot.val().clean() // clean removes undefined
+
+      // Add id to words
+      //  words = words.map(function(x, i) {
+      //   x.id = 1;
+      //   return x
+      // });
 
       this.setState({
-        words: dataSnapshot.val()
+        words: words
       });
+
+      console.log("Update from Firebase", words );
+
     }.bind(this));
   }
 
@@ -36,58 +46,77 @@ class CardList extends Component {
   constructor() {
     super();
     this.state = {
-      selected_from_word_id: null,
-      selected_to_word_id: null,
+      selected_from_word: null,
+      selected_to_word: null,
       words: [],
     }
   };
 
 
-  increaseCorrectCount(word_id) {
-      this.setState({
-        selected_from_word_id: word_id
-      })
+  increaseCorrectCount() {
+    // Get a key for a new Post.
+    //var newPostKey = firebase.database().ref().child('posts').push().key;
+
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    var updates = {};
+    //updates['/posts/' + newPostKey] = postData;
+    //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+    let word = this.state.selected_from_word
+    console.log("Word id is: ", word.id)
+    word.correct_guesses++
+    updates['/flashcards/users/martin/flashcards/' + word.id ] = word;
+
+    return firebase.database().ref().update(updates);
+    //return firebase.database().ref().update(updates);
   }
 
   resetSelectedWords() {
     console.log('reset');
     this.setState({
-      selected_from_word_id: null,
-      selected_to_word_id: null
+      selected_from_word: null,
+      selected_to_word: null
     })
   }
 
   compareSelections() {
-    if (this.state.selected_from_word_id === this.state.selected_to_word_id) {
-      console.log('correct word')
+    console.log(this.state.selected_from_word +'==='+ this.state.selected_to_word)
+    if (! (this.state.selected_from_word && this.state.selected_to_word))  {
+      console.log('from or two is null, will not compare yet.')
+      // I just clicked to_word. Why is that not stored in state when this is a callback
+      // for the setState function?
+      return
+    }
+    if (this.state.selected_from_word === this.state.selected_to_word) {
+      console.log('CORRECT WORD')
       this.increaseCorrectCount()
     } else {
       console.log('NOT correct word')
     }
     this.resetSelectedWords()
+    console.log("State is: ", this.state);
   };
 
   wordSelected(word, side) {
     if (side  === 'from') {
       this.setState({
-        selected_from_word_id: word.id
-      });
-    }
-
-    if (side  === 'to') {
-      this.setState(
-        { selected_to_word_id: word.id },
+        selected_from_word: word },
         this.compareSelections
       );
     }
 
-    console.log("State is: ", this.state);
+    if (side  === 'to') {
+      this.setState(
+        { selected_to_word: word },
+        this.compareSelections
+      );
+    }
+
 
 
   }
 
   render() {
-
 
     var from_list = this.state.words.map((word, index) => (
       <li
@@ -96,8 +125,9 @@ class CardList extends Component {
         onClick={ this.wordSelected.bind(this, word, 'from') }
       >
         {word.from}
+        <em>({word.correct_guesses}) </em>
       </li>
-    )).shuffle()
+    )) //.shuffle()
 
 
 
@@ -108,8 +138,9 @@ class CardList extends Component {
         onClick={ this.wordSelected.bind(this, word, 'to') }
       >
         {word.to}
+        <em>({word.correct_guesses}) </em>
       </li>
-    )).shuffle()
+    )) //.shuffle()
 
 
     return (
