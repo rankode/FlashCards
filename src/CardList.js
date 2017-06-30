@@ -52,7 +52,9 @@ class CardList extends Component {
     this.state = {
       selected_from_word: null,
       selected_to_word: null,
-      settings: {},
+      settings: {
+        corrects_required: null
+      },
       words: [],
     }
   };
