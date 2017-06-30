@@ -59,6 +59,14 @@ class CardList extends Component {
     }
   };
 
+  removeWordsIfCorrectsRequiredReaced() {
+    if (this.state.selected_from_word.correct_guesses === this.state.settings.corrects_required) {
+      var updates = {};
+      let word = this.state.selected_from_word
+      updates['/flashcards/users/martin/flashcards/' + word.id ] = word;
+      return firebase.database().ref().remove(updates);
+    }
+  }
 
   increaseCorrectCount() {
     var updates = {};
@@ -76,6 +84,7 @@ class CardList extends Component {
   }
 
   compareSelections() {
+    // Return if from or two is null
     if (! (this.state.selected_from_word && this.state.selected_to_word))  {
       return
     }
@@ -83,6 +92,7 @@ class CardList extends Component {
       this.increaseCorrectCount()
     }
     this.resetSelectedWords()
+    this.removeWordsIfCorrectsRequiredReaced()
   };
 
   wordSelected(word, side) {
